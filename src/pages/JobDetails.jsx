@@ -50,6 +50,8 @@ function JobDetails() {
 
       await applyJob({
 
+        userId: user.uid,
+
         userEmail: user.email,
 
         jobId: job.id,

@@ -8,17 +8,20 @@ import { useAuth } from "../context/AuthContext";
 
 import toast from "react-hot-toast";
 
+import { Navigate } from "react-router-dom";
+
 function Register() {
 
   const navigate = useNavigate();
 
-  const { register } = useAuth();
+  const { register, user } = useAuth();
 
   // FORM STATE
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  email: "",
+  password: "",
+  role: "candidate",
+});
 
   // LOADING
   const [loading, setLoading] = useState(false);
@@ -48,7 +51,8 @@ function Register() {
 
       await register(
         formData.email,
-        formData.password
+        formData.password,
+        formData.role
       );
 
       toast.success("Account Created Successfully!");
@@ -62,6 +66,10 @@ function Register() {
 
     setLoading(false);
   };
+
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
   return (
 
@@ -148,6 +156,34 @@ function Register() {
               />
 
             </div>
+
+            {/* Role */}
+<div>
+
+  <label className="block mb-3 font-semibold text-gray-700">
+
+    Account Type
+
+  </label>
+
+  <select
+    name="role"
+    value={formData.role}
+    onChange={handleChange}
+    className="w-full border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
+  >
+
+    <option value="candidate">
+      Candidate
+    </option>
+
+    <option value="employer">
+      Employer
+    </option>
+
+  </select>
+
+</div>
 
             {/* Button */}
             <button

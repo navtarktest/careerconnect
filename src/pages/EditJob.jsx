@@ -1,39 +1,71 @@
-import React, { useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from "react";
 
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useJobs } from "../context/JobsContext";
-import { useAuth } from "../context/AuthContext";
 
 import toast from "react-hot-toast";
 
-function PostJob() {
+function EditJob() {
+
+  const { id } = useParams();
 
   const navigate = useNavigate();
 
-  const { addJob } = useJobs();
-  const { user } = useAuth();
+  const {
+    jobs,
+    updateJob,
+  } = useJobs();
 
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] =
+    useState({
+      title: "",
+      company: "",
+      location: "",
+      salary: "",
+      type: "",
+      description: "",
+    });
 
-  const [formData, setFormData] = useState({
-    title: "",
-    company: "",
-    location: "",
-    salary: "",
-    type: "Full Time",
-    description: "",
-  });
+  // FIND JOB
+  const job = jobs.find(
+    (item) => item.id === id
+  );
+
+  // LOAD DATA
+  useEffect(() => {
+
+    if (job) {
+
+      setFormData({
+        title: job.title || "",
+        company: job.company || "",
+        location: job.location || "",
+        salary: job.salary || "",
+        type: job.type || "",
+        description:
+          job.description || "",
+      });
+    }
+
+  }, [job]);
 
   // HANDLE CHANGE
   const handleChange = (e) => {
 
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     });
   };
 
@@ -44,30 +76,37 @@ function PostJob() {
 
     try {
 
-      setLoading(true);
+      await updateJob(
+        id,
+        formData
+      );
 
-      await addJob({
+      toast.success(
+        "Job Updated Successfully!"
+      );
 
-        ...formData,
-
-        postedBy: user.uid,
-
-        postedByEmail: user.email,
-
-        createdAt: new Date().toISOString(),
-      });
-
-      toast.success("Job Posted Successfully!");
-
-      navigate("/jobs");
+      navigate(
+        "/employer-dashboard"
+      );
 
     } catch (error) {
 
       toast.error(error.message);
     }
-
-    setLoading(false);
   };
+
+  // NOT FOUND
+  if (!job) {
+
+    return (
+
+      <div className="min-h-screen flex items-center justify-center text-3xl font-bold">
+
+        Job Not Found
+
+      </div>
+    );
+  }
 
   return (
 
@@ -84,69 +123,60 @@ function PostJob() {
 
             <h1 className="text-5xl font-extrabold text-[#0f172a]">
 
-              Post A New Job
+              Edit Job
 
             </h1>
 
             <p className="text-gray-500 text-lg mt-4">
 
-              Reach thousands of professionals instantly.
+              Update your job details.
 
             </p>
 
           </div>
 
-          {/* Form */}
+          {/* FORM */}
           <form
             onSubmit={handleSubmit}
             className="space-y-6"
           >
 
-            {/* Title */}
             <input
               type="text"
               name="title"
               placeholder="Job Title"
               value={formData.title}
               onChange={handleChange}
-              required
               className="w-full border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
             />
 
-            {/* Company */}
             <input
               type="text"
               name="company"
-              placeholder="Company Name"
+              placeholder="Company"
               value={formData.company}
               onChange={handleChange}
-              required
               className="w-full border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
             />
 
-            {/* Location */}
             <input
               type="text"
               name="location"
-              placeholder="Job Location"
+              placeholder="Location"
               value={formData.location}
               onChange={handleChange}
-              required
               className="w-full border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
             />
 
-            {/* Salary */}
             <input
               type="text"
               name="salary"
               placeholder="Salary"
               value={formData.salary}
               onChange={handleChange}
-              required
               className="w-full border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
             />
 
-            {/* Type */}
             <select
               name="type"
               value={formData.type}
@@ -168,27 +198,21 @@ function PostJob() {
 
             </select>
 
-            {/* Description */}
             <textarea
-              name="description"
               rows="6"
-              placeholder="Job Description"
+              name="description"
+              placeholder="Description"
               value={formData.description}
               onChange={handleChange}
-              required
               className="w-full border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
             />
 
-            {/* Button */}
+            {/* BUTTON */}
             <button
-              type="submit"
-              disabled={loading}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl text-xl font-bold transition"
             >
 
-              {loading
-                ? "Posting Job..."
-                : "Post Job"}
+              Update Job
 
             </button>
 
@@ -204,4 +228,4 @@ function PostJob() {
   );
 }
 
-export default PostJob;
+export default EditJob;

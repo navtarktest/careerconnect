@@ -9,10 +9,13 @@ import Jobs from "./pages/Jobs";
 import JobDetails from "./pages/JobDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import PostJob from "./pages/PostJob";
+import Applications from "./pages/Applications";
+import EmployerDashboard from "./pages/EmployerDashboard";
+import EditJob from "./pages/EditJob";
+import JobApplicants from "./pages/JobApplicants";
 
 function App() {
 
@@ -47,12 +50,13 @@ function App() {
           element={<Register />}
         />
 
-        <Route
-  path="/dashboard"
+
+<Route
+  path="/employer-dashboard"
   element={
     <ProtectedRoute>
 
-      <Dashboard />
+      <EmployerDashboard />
 
     </ProtectedRoute>
   }
@@ -64,6 +68,39 @@ function App() {
     <ProtectedRoute>
 
       <PostJob />
+
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/edit-job/:id"
+  element={
+    <ProtectedRoute>
+
+      <EditJob />
+
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/job-applicants/:jobId"
+  element={
+    <ProtectedRoute>
+
+      <JobApplicants />
+
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/applications"
+  element={
+    <ProtectedRoute>
+
+      <Applications />
 
     </ProtectedRoute>
   }

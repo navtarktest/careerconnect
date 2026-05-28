@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 function Navbar() {
 
-  const { user, logout } = useAuth();
+  const { user, userRole,logout } = useAuth();
 
   // HANDLE LOGOUT
   const handleLogout = async () => {
@@ -62,7 +62,7 @@ function Navbar() {
 
           </Link>
 
-          {user && (
+          {userRole === "employer" && (
 
   <Link
     to="/post-job"
@@ -75,14 +75,27 @@ function Navbar() {
 
 )}
 
-          {user && (
+{userRole === "employer" && (
 
   <Link
-    to="/dashboard"
+    to="/employer-dashboard"
     className="hover:text-blue-600 transition"
   >
 
-    Dashboard
+    Employer Dashboard
+
+  </Link>
+
+)}
+
+{userRole === "candidate" && (
+
+  <Link
+    to="/applications"
+    className="hover:text-blue-600 transition"
+  >
+
+    Applications
 
   </Link>
 

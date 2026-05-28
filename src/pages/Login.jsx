@@ -8,11 +8,13 @@ import { useAuth } from "../context/AuthContext";
 
 import toast from "react-hot-toast";
 
+import { Navigate } from "react-router-dom";
+
 function Login() {
 
   const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const { login, user } = useAuth();
 
   // FORM STATE
   const [formData, setFormData] = useState({
@@ -63,8 +65,12 @@ function Login() {
     setLoading(false);
   };
 
-  return (
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
+  return (
+    
     <div className="min-h-screen bg-[#f8fafc]">
 
       <Navbar />
