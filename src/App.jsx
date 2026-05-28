@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import PostJob from "./pages/PostJob";
 
 function App() {
 
@@ -52,6 +53,17 @@ function App() {
     <ProtectedRoute>
 
       <Dashboard />
+
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/post-job"
+  element={
+    <ProtectedRoute>
+
+      <PostJob />
 
     </ProtectedRoute>
   }

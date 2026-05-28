@@ -6,6 +6,8 @@ import Navbar from "../components/Navbar";
 
 import { useAuth } from "../context/AuthContext";
 
+import toast from "react-hot-toast";
+
 function Login() {
 
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ function Login() {
         formData.password
       );
 
-      alert("Login Successful!");
+      toast.success("Login Successful!");
 
       navigate("/");
 

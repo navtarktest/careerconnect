@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 import AuthProvider from "./context/AuthContext";
+import JobsProvider from "./context/JobsContext";
+import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(
   document.getElementById('root')
@@ -10,7 +12,16 @@ ReactDOM.createRoot(
   <React.StrictMode>
     <AuthProvider>
 
-      <App />
+      <JobsProvider>
+
+    <App />
+    
+    <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
+
+  </JobsProvider>
 
     </AuthProvider>
   </React.StrictMode>,

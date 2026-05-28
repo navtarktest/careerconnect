@@ -5,38 +5,69 @@ import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-import jobs from "../data/jobs";
+import toast from "react-hot-toast";
+
+import { useAuth } from "../context/AuthContext";
+import { useJobs } from "../context/JobsContext";
 
 function JobDetails() {
 
-  // GET URL PARAM
   const { id } = useParams();
+
+  const { jobs, applyJob } = useJobs();
+
+  const { user } = useAuth();
 
   // FIND JOB
   const job = jobs.find(
-    (item) => item.id === Number(id)
+    (item) => item.id === id
   );
 
-  // IF JOB NOT FOUND
+  // JOB NOT FOUND
   if (!job) {
 
     return (
 
-      <div>
+      <div className="min-h-screen flex items-center justify-center text-3xl font-bold">
 
-        <Navbar />
-
-        <div className="min-h-screen flex items-center justify-center text-4xl font-bold">
-
-          Job Not Found
-
-        </div>
-
-        <Footer />
+        Job Not Found
 
       </div>
     );
   }
+
+  // HANDLE APPLY
+  const handleApply = async () => {
+
+    if (!user) {
+
+      toast.error("Please login first");
+
+      return;
+    }
+
+    try {
+
+      await applyJob({
+
+        userEmail: user.email,
+
+        jobId: job.id,
+
+        jobTitle: job.title,
+
+        company: job.company,
+
+        appliedAt: new Date().toISOString(),
+      });
+
+      toast.success("Application Submitted!");
+
+    } catch (error) {
+
+      toast.error(error.message);
+    }
+  };
 
   return (
 
@@ -44,86 +75,64 @@ function JobDetails() {
 
       <Navbar />
 
-      {/* Page */}
       <div className="max-w-5xl mx-auto px-6 py-20">
 
-        {/* Card */}
-        <div className="bg-white rounded-3xl shadow-xl p-12 border border-gray-200">
+        <div className="bg-white rounded-3xl shadow-xl p-10 border border-gray-200">
 
-          {/* Top */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 mb-10">
+          {/* Job Title */}
+          <h1 className="text-5xl font-extrabold text-[#0f172a] mb-6">
 
-            <div>
+            {job.title}
 
-              <h1 className="text-5xl font-extrabold text-[#0f172a]">
+          </h1>
 
-                {job.title}
+          {/* Company */}
+          <div className="space-y-3 text-lg text-gray-600 mb-10">
 
-              </h1>
+            <p>
+              <span className="font-bold">
+                Company:
+              </span>{" "}
 
-              <p className="text-2xl text-gray-500 mt-4">
+              {job.company}
+            </p>
 
-                {job.company}
+            <p>
+              <span className="font-bold">
+                Location:
+              </span>{" "}
 
-              </p>
+              {job.location}
+            </p>
 
-            </div>
+            <p>
+              <span className="font-bold">
+                Salary:
+              </span>{" "}
 
-            <div className="bg-blue-100 text-blue-600 px-6 py-3 rounded-2xl font-bold text-lg">
+              {job.salary}
+            </p>
+
+            <p>
+              <span className="font-bold">
+                Type:
+              </span>{" "}
 
               {job.type}
-
-            </div>
-
-          </div>
-
-          {/* Info */}
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-
-            <div className="bg-[#f8fafc] rounded-2xl p-6">
-
-              <h3 className="font-bold text-xl mb-3 text-[#0f172a]">
-
-                Location
-
-              </h3>
-
-              <p className="text-gray-600 text-lg">
-
-                📍 {job.location}
-
-              </p>
-
-            </div>
-
-            <div className="bg-[#f8fafc] rounded-2xl p-6">
-
-              <h3 className="font-bold text-xl mb-3 text-[#0f172a]">
-
-                Salary
-
-              </h3>
-
-              <p className="text-gray-600 text-lg">
-
-                💰 {job.salary}
-
-              </p>
-
-            </div>
+            </p>
 
           </div>
 
           {/* Description */}
           <div className="mb-12">
 
-            <h2 className="text-3xl font-bold text-[#0f172a] mb-6">
+            <h2 className="text-3xl font-bold mb-5">
 
               Job Description
 
             </h2>
 
-            <p className="text-gray-600 text-lg leading-relaxed">
+            <p className="text-gray-600 leading-8 text-lg">
 
               {job.description}
 
@@ -131,39 +140,11 @@ function JobDetails() {
 
           </div>
 
-          {/* Requirements */}
-          <div className="mb-12">
-
-            <h2 className="text-3xl font-bold text-[#0f172a] mb-6">
-
-              Requirements
-
-            </h2>
-
-            <ul className="space-y-4 text-gray-600 text-lg">
-
-              <li>
-                ✅ Strong communication skills
-              </li>
-
-              <li>
-                ✅ Minimum 2+ years experience
-              </li>
-
-              <li>
-                ✅ Team collaboration mindset
-              </li>
-
-              <li>
-                ✅ Problem-solving ability
-              </li>
-
-            </ul>
-
-          </div>
-
           {/* Apply Button */}
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl text-xl font-bold transition">
+          <button
+            onClick={handleApply}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl text-xl font-bold transition"
+          >
 
             Apply Now
 

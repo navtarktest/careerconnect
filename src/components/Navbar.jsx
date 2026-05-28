@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
+import toast from "react-hot-toast";
+
 function Navbar() {
 
   const { user, logout } = useAuth();
@@ -15,7 +17,7 @@ function Navbar() {
 
       await logout();
 
-      alert("Logged Out Successfully!");
+      toast.success("Logged Out Successfully!");
 
     } catch (error) {
 
@@ -59,6 +61,19 @@ function Navbar() {
             Jobs
 
           </Link>
+
+          {user && (
+
+  <Link
+    to="/post-job"
+    className="hover:text-blue-600 transition"
+  >
+
+    Post Job
+
+  </Link>
+
+)}
 
           {user && (
 

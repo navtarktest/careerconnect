@@ -4,10 +4,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import JobCard from "../components/JobCard";
 
-import jobs from "../data/jobs";
+import { useJobs } from "../context/JobsContext";
 
 function Jobs() {
-
+  const { jobs } = useJobs();
   // SEARCH STATE
   const [search, setSearch] = useState("");
 

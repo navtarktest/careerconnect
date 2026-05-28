@@ -6,6 +6,8 @@ import Navbar from "../components/Navbar";
 
 import { useAuth } from "../context/AuthContext";
 
+import toast from "react-hot-toast";
+
 function Register() {
 
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ function Register() {
         formData.password
       );
 
-      alert("Account Created Successfully!");
+      toast.success("Account Created Successfully!");
 
       navigate("/");
 
