@@ -1,6 +1,29 @@
 import React from "react";
 
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import { useState } from "react";
+
 function Hero() {
+
+  const [search, setSearch] =
+  useState("");
+  const [location, setLocation] =
+  useState("");
+
+const navigate = useNavigate();
+
+// HANDLE SEARCH
+const handleSearch = () => {
+
+  navigate(
+
+  `/jobs?search=${search}&location=${location}`
+
+)
+};
 
   return (
 
@@ -34,27 +57,41 @@ function Hero() {
           </p>
 
           {/* Search Box */}
-          <div className="mt-10 bg-white shadow-xl rounded-2xl p-4 flex flex-col md:flex-row gap-4">
+<div className="mt-10 bg-white shadow-2xl rounded-3xl p-4 flex flex-col md:flex-row items-center gap-4 max-w-3xl">
 
-            <input
-              type="text"
-              placeholder="Job title or keyword"
-              className="flex-1 border border-gray-200 rounded-xl px-5 py-4 outline-none focus:border-blue-500"
-            />
+  {/* Search Input */}
+  <input
+    type="text"
+    placeholder="Job title or keyword"
+    value={search}
+    onChange={(e) =>
+      setSearch(e.target.value)
+    }
+    className="flex-1 w-full border border-gray-200 rounded-2xl px-5 h-16 outline-none focus:border-blue-500 text-lg"
+  />
 
-            <input
-              type="text"
-              placeholder="Location"
-              className="flex-1 border border-gray-200 rounded-xl px-5 py-4 outline-none focus:border-blue-500"
-            />
+  {/* Location Input */}
+  <input
+    type="text"
+    placeholder="Location"
+    value={location}
+    onChange={(e) =>
+      setLocation(e.target.value)
+    }
+    className="flex-1 w-full border border-gray-200 rounded-2xl px-5 h-16 outline-none focus:border-blue-500 text-lg"
+  />
 
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold transition">
+  {/* Search Button */}
+  <button
+    onClick={handleSearch}
+    className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-10 h-16 rounded-2xl font-bold text-lg transition"
+  >
 
-              Search Jobs
+    Search Jobs
 
-            </button>
+  </button>
 
-          </div>
+</div>
 
         </div>
 

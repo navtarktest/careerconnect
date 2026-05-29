@@ -6,10 +6,28 @@ import JobCard from "../components/JobCard";
 
 import { useJobs } from "../context/JobsContext";
 
+import {
+  useSearchParams,
+} from "react-router-dom";
+
 function Jobs() {
   const { jobs } = useJobs();
+
+  const [searchParams] =
+  useSearchParams();
+
+  const urlSearch =
+  searchParams.get("search") || "";
+
+  const urlLocation =
+  searchParams.get("location") || "";
+
   // SEARCH STATE
-  const [search, setSearch] = useState("");
+  const [search, setSearch] =
+  useState(urlSearch);
+
+  const [location, setLocation] =
+  useState(urlLocation);
 
   // FILTER STATE
   const [jobType, setJobType] = useState("All");
@@ -17,26 +35,36 @@ function Jobs() {
   // FILTER LOGIC
   const filteredJobs = jobs.filter((job) => {
 
-    const matchesSearch =
+  const matchesSearch =
 
-      job.title
-        .toLowerCase()
-        .includes(search.toLowerCase())
+    job.title
+      .toLowerCase()
+      .includes(search.toLowerCase())
 
-      ||
+    ||
 
-      job.company
-        .toLowerCase()
-        .includes(search.toLowerCase());
+    job.company
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-    const matchesType =
+  const matchesLocation =
 
-      jobType === "All"
-        ? true
-        : job.type === jobType;
+    job.location
+      .toLowerCase()
+      .includes(location.toLowerCase());
 
-    return matchesSearch && matchesType;
-  });
+  const matchesType =
+
+    jobType === "All"
+      ? true
+      : job.type === jobType;
+
+  return (
+    matchesSearch &&
+    matchesLocation &&
+    matchesType
+  );
+});
 
   return (
 
@@ -64,7 +92,7 @@ function Jobs() {
       {/* Search + Filter */}
       <div className="max-w-7xl mx-auto px-6 mb-14">
 
-        <div className="bg-white rounded-3xl shadow-lg p-6 grid md:grid-cols-3 gap-5">
+        <div className="bg-white rounded-3xl shadow-lg p-6 grid md:grid-cols-4 gap-5">
 
           {/* Search */}
           <input
@@ -76,6 +104,17 @@ function Jobs() {
             }
             className="border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
           />
+
+          {/* Location */}
+<input
+  type="text"
+  placeholder="Location"
+  value={location}
+  onChange={(e) =>
+    setLocation(e.target.value)
+  }
+  className="border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:border-blue-500"
+/>
 
           {/* Filter */}
           <select
